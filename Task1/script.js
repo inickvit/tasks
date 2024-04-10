@@ -30,35 +30,6 @@ async function fetchData() {
     }
 }
 
-async function fetchAndStore() {
-    const data = await fetchData();
-    if (data) {
-        const csvContent = generateCSV(data);
-        downloadCSV(csvContent);
-    } else {
-        console.error('Failed to fetch data.');
-    }
-}
-
-function generateCSV(data) {
-    let csvContent = 'activityID,startTime\n';
-    for (const entry of data) {
-        const activityID = entry.activityID;
-        const startTime = entry.startTime;
-        csvContent += `${activityID},${startTime}\n`;
-    }
-    return csvContent;
-}
-
-function downloadCSV(csvContent) {
-    const filename = 'cme_data.csv';
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = filename;
-    link.click();
-}
-
 async function fetchAndDraw() {
     const data = await fetchData();
     if (data) {
