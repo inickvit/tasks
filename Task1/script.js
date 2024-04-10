@@ -118,3 +118,19 @@ function generateChart(data, chartType = 'line', canvasId) {
         }
     });
 }
+
+function copyChart(chartId) {
+    var canvas = document.getElementById(chartId);
+    canvas.toBlob(function(blob) {
+        try {
+            navigator.clipboard.write([
+                new ClipboardItem({
+                    'image/png': blob
+                })
+            ]);
+            console.log('Image copied to clipboard successfully.');
+        } catch (error) {
+            console.error('Unable to copy image to clipboard:', error);
+        }
+    }, 'image/png');
+}
