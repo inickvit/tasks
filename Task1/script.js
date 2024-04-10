@@ -13,7 +13,6 @@ async function fetchData() {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
         return data;
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -50,6 +49,46 @@ function downloadCSV(csvContent) {
     link.click();
 }
 
+async function fetchAndDraw() {
+    const data = await fetchData();
+    if (data) {
+        generateChart(data, 'line', 'lineChart');
+    } else {
+        console.error('Failed to fetch data.');
+    }
+}
+
+function generateChart(data, chartType = 'line', canvasId) {
+    const yearCounts = {};
+    data.forEach(item => {
+        const year = item.activityID.substring(0, 4);
+        yearCounts[year] = (yearCounts[year] || 0) + 1;
+    });
+
+    const labels = Object.keys(yearCounts);
+    const counts = Object.values(yearCounts);
+
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: chartType,
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'CME Count',
+                data: counts,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    fetchAndStore();
+    fetchAndDraw();
 })
