@@ -1,3 +1,7 @@
+document.addEventListener("DOMContentLoaded", () => {
+    fetchAndDraw();
+})
+
 async function fetchData() {
 
     const cachedData = localStorage.getItem('cmeData');
@@ -59,6 +63,12 @@ async function fetchAndDraw() {
     const data = await fetchData();
     if (data) {
         generateChart(data, 'line', 'lineChart');
+        generateChart(data, 'bar', 'barChart');
+        generateChart(data, 'pie', 'pieChart');
+        generateChart(data, 'scatter', 'scatterPlot');
+        generateChart(data, 'doughnut', 'doughnutChart');
+        generateChart(data, 'polarArea', 'polarAreaChart');
+        generateChart(data, 'radar', 'radarChart')
     } else {
         console.error('Failed to fetch data.');
     }
@@ -70,6 +80,10 @@ function generateChart(data, chartType = 'line', canvasId) {
         const year = item.activityID.substring(0, 4);
         yearCounts[year] = (yearCounts[year] || 0) + 1;
     });
+
+    let titleText = chartType[0].toUpperCase() + chartType.slice(1) + ' Graph';
+    let boringFlag = ['line', 'bar', 'scatter', 'radar'].includes(chartType) ? false : true;
+    let legendPos = boringFlag ? 'right' : 'top';
 
     const labels = Object.keys(yearCounts);
     const counts = Object.values(yearCounts);
@@ -86,16 +100,21 @@ function generateChart(data, chartType = 'line', canvasId) {
             }]
         },
         options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: titleText
+                },
+                legend: {
+                    position: legendPos
+                },
+            },
             scales: {
                 y: {
                     beginAtZero: true
                 }
             },
+            responsive: false
         }
     });
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    localStorage.clear();
-    fetchAndDraw();
-})
