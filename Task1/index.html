@@ -4,24 +4,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Charts</title>
+    <title>CME Visualizations</title>
 
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"
         integrity="sha512-ZwR1/gSZM3ai6vCdI+LVF1zSq/5HznD3ZSTk7kajkaj4D292NLuduDCO1c/NT8Id+jE58KYLKT7hXnbtryGmMg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.4.0/clipboard.min.js"
+        integrity="sha512-iJh0F10blr9SC3d0Ow1ZKHi9kt12NYa+ISlmCdlCdNZzFwjH1JppRTeAnypvUez01HroZhAmP4ro4AvZ/rG0UQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="script.js"></script>
 </head>
 
 <body>
-    <canvas id="lineChart" height="500" width="500"></canvas>
-    <canvas id="pieChart" height="500" width="500"></canvas>
-    <canvas id="barChart" height="500" width="500"></canvas>
-    <canvas id="doughnutChart" height="500" width="500"></canvas>
-    <canvas id="scatterPlot" height="500" width="500"></canvas>
-    <canvas id="polarAreaChart" height="500" width="500"></canvas>
-    <canvas id="radarChart" height="500" width="500"></canvas>
+    <header>
+        <h1>Visualization of NASA CME Readings</h1>
+        <h3>2013-2023</h3>
+    </header>
+
+    <div class="chart-container">
+        <div id="chartCarousel" class="carousel slide" data-interval="false">
+            <ol class="carousel-indicators">
+                <li data-target="#chartCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#chartCarousel" data-slide-to="1"></li>
+                <li data-target="#chartCarousel" data-slide-to="2"></li>
+                <li data-target="#chartCarousel" data-slide-to="3"></li>
+                <li data-target="#chartCarousel" data-slide-to="4"></li>
+                <li data-target="#chartCarousel" data-slide-to="5"></li>
+                <li data-target="#chartCarousel" data-slide-to="6"></li>
+            </ol>
+
+            <div class="carousel-inner">
+                <div class="item active">
+                    <canvas id="lineChart" class="chart-canvas" height="500" width="500"></canvas>
+                </div>
+                <div class="item">
+                    <canvas id="pieChart" class="chart-canvas" height="500" width="500"></canvas>
+                </div>
+                <div class="item">
+                    <canvas id="barChart" class="chart-canvas" height="500" width="500"></canvas>
+                </div>
+                <div class="item">
+                    <canvas id="doughnutChart" class="chart-canvas" height="500" width="500"></canvas>
+                </div>
+                <div class="item">
+                    <canvas id="scatterPlot" class="chart-canvas" height="500" width="500"></canvas>
+                </div>
+                <div class="item">
+                    <canvas id="polarAreaChart" class="chart-canvas" height="500" width="500"></canvas>
+                </div>
+                <div class="item">
+                    <canvas id="radarChart" class="chart-canvas" height="500" width="500"></canvas>
+                </div>
+            </div>
+
+            <a class="left carousel-control" href="#chartCarousel" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#chartCarousel" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
 </body>
 
 </html>
