@@ -1,9 +1,14 @@
 async function fetchData() {
 
+    const cachedData = localStorage.getItem('cmeData');
+    if (cachedData) {
+        return JSON.parse(cachedData);
+    }
+
     const apiKey = "IB7Gc05NpGEpGTXLQPepFMhOMQ4oH8G7bjSDKyJg";
     const baseUrl = 'https://api.nasa.gov/DONKI/CME';
 
-    const startDate = '2022-01-01';
+    const startDate = '2013-01-01';
     const endDate = '2022-12-31';
     const url = `${baseUrl}?startDate=${startDate}&endDate=${endDate}&api_key=${apiKey}`;
 
@@ -13,6 +18,7 @@ async function fetchData() {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
+        localStorage.setItem('cmeData', JSON.stringify(data));
         return data;
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -90,5 +96,6 @@ function generateChart(data, chartType = 'line', canvasId) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    localStorage.clear();
     fetchAndDraw();
 })
