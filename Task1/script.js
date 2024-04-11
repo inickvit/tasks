@@ -77,15 +77,15 @@ function generateChart(data, chartType = 'line', canvasId, criteria = "year") {
         labels = Object.keys(monthCounts);
         counts = Object.values(monthCounts).map(count => (count / 10));
     } else if (criteria === 'hour') {
-        const hourCounts = Array(24).fill(0); // Initialize an array to hold counts for each hour
+        const hourCounts = Array(24).fill(0);
         
         data.forEach(item => {
-            const hour = parseInt(item.activityID.substring(11, 13), 10); // Extract hour from activityID
-            hourCounts[hour] += 1; // Increment count for the corresponding hour
+            const hour = parseInt(item.activityID.substring(11, 13), 10);
+            hourCounts[hour] += 1;
         });
 
-        labels = Array.from({length: 24}, (_, i) => `${i}:00`); // Generate labels for each hour
-        counts = hourCounts.map(count => (count / 10)); // Calculate average counts for each hour
+        labels = Array.from({length: 24}, (_, i) => `${i}:00`);
+        counts = hourCounts.map(count => (count / 10));
     }
 
     let titleText = chartType[0].toUpperCase() + chartType.slice(1) + ' Graph';
@@ -138,4 +138,23 @@ function openCloseNav() {
         document.getElementById("main").style.marginLeft = "0";
         menuOpen = false
     }
+}
+
+function copyChart(button, chartId) {
+    var canvas = document.getElementById(chartId);
+    canvas.toBlob(function(blob) {
+        try {
+            navigator.clipboard.write([
+                new ClipboardItem({
+                    'image/png': blob
+                })
+            ]);
+            button.innerText = "Copied!";
+            setTimeout(function() {
+                button.innerText = "Copy Image";
+            }, 800);
+        } catch (error) {
+            console.error('Unable to copy image to clipboard:', error);
+        }
+    }, 'image/png');
 }
