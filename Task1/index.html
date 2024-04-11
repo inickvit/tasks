@@ -21,62 +21,73 @@
 </head>
 
 <body>
-    <header>
-        <h1>Visualization of NASA CME Readings</h1>
-        <h3>2013-2023</h3>
-    </header>
-
-    <div class="chart-container">
-        <div id="chartCarousel" class="carousel slide" data-interval="false">
-            <ol class="carousel-indicators">
-                <li data-target="#chartCarousel" data-slide-to="0" class="active"></li>
-                <li data-target="#chartCarousel" data-slide-to="1"></li>
-                <li data-target="#chartCarousel" data-slide-to="2"></li>
-                <li data-target="#chartCarousel" data-slide-to="3"></li>
-                <li data-target="#chartCarousel" data-slide-to="4"></li>
-                <li data-target="#chartCarousel" data-slide-to="5"></li>
-                <li data-target="#chartCarousel" data-slide-to="6"></li>
-            </ol>
-
-            <div class="carousel-inner">
-                <div class="item active">
-                    <canvas id="lineChart" class="chart-canvas" height="500" width="500"></canvas>
-                    <button class="copy-button" onclick="copyChart('lineChart')">Copy Image</button>
-                </div>
-                <div class="item">
-                    <canvas id="pieChart" class="chart-canvas" height="500" width="500"></canvas>
-                    <button class="copy-button" onclick="copyChart('pieChart')">Copy Image</button>
-                </div>
-                <div class="item">
-                    <canvas id="barChart" class="chart-canvas" height="500" width="500"></canvas>
-                    <button class="copy-button" onclick="copyChart('barChart')">Copy Image</button>
-                </div>
-                <div class="item">
-                    <canvas id="doughnutChart" class="chart-canvas" height="500" width="500"></canvas>
-                    <button class="copy-button" onclick="copyChart('doughnutChart')">Copy Image</button>
-                </div>
-                <div class="item">
-                    <canvas id="scatterPlot" class="chart-canvas" height="500" width="500"></canvas>
-                    <button class="copy-button" onclick="copyChart('scatterPlot')">Copy Image</button>
-                </div>
-                <div class="item">
-                    <canvas id="polarAreaChart" class="chart-canvas" height="500" width="500"></canvas>
-                    <button class="copy-button" onclick="copyChart('polarAreaChart')">Copy Image</button>
-                </div>
-                <div class="item">
-                    <canvas id="radarChart" class="chart-canvas" height="500" width="500"></canvas>
-                    <button class="copy-button" onclick="copyChart('radarChart')">Copy Image</button>
-                </div>
+    <div id="menuSidebar" class="sidebar">
+        <a href="javascript:void(0);" onclick="fetchAndDraw('year')">Yearly Readings</a>
+        <a href="javascript:void(0);" onclick="fetchAndDraw('month')">Monthly Readings</a>
+        <a href="javascript:void(0);" onclick="fetchAndDraw('hour')">Hourly Reading</a>
+    </div>
+    <div id="main">
+        <header>
+        <div id="header-container">
+            <div id="title-container">
+                <h1>Visualization of NASA CME Readings</h1>
+                <h3>2013-2023</h3>
             </div>
+        </div>
+        
+        <div id="openbtn-container">
+            <button class="openbtn" onclick="openCloseNav()">&#9776; More</button>
+        </div>
 
-            <a class="left carousel-control" href="#chartCarousel" data-slide="prev">
-                <span class="glyphicon glyphicon-chevron-left"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="right carousel-control" href="#chartCarousel" data-slide="next">
-                <span class="glyphicon glyphicon-chevron-right"></span>
-                <span class="sr-only">Next</span>
-            </a>
+        </header>
+
+        <div class="chart-container">
+            <div id="chartCarousel" class="carousel slide" data-interval="false">
+                <ol class="carousel-indicators">
+                    <li data-target="#chartCarousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#chartCarousel" data-slide-to="1"></li>
+                    <li data-target="#chartCarousel" data-slide-to="2"></li>
+                    <li data-target="#chartCarousel" data-slide-to="3"></li>
+                    <li data-target="#chartCarousel" data-slide-to="4"></li>
+                    <li data-target="#chartCarousel" data-slide-to="5"></li>
+                </ol>
+
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <canvas id="lineChart" class="chart-canvas" height="500" width="500"></canvas>
+                        <button class="copy-button" onclick="copyChart(this,'lineChart')">Copy Image</button>
+                    </div>
+                    <div class="item">
+                        <canvas id="pieChart" class="chart-canvas" height="500" width="500"></canvas>
+                        <button class="copy-button" onclick="copyChart(this,'pieChart')">Copy Image</button>
+                    </div>
+                    <div class="item">
+                        <canvas id="barChart" class="chart-canvas" height="500" width="500"></canvas>
+                        <button class="copy-button" onclick="copyChart(this,'barChart')">Copy Image</button>
+                    </div>
+                    <div class="item">
+                        <canvas id="doughnutChart" class="chart-canvas" height="500" width="500"></canvas>
+                        <button class="copy-button" onclick="copyChart(this,'doughnutChart')">Copy Image</button>
+                    </div>
+                    <div class="item">
+                        <canvas id="polarAreaChart" class="chart-canvas" height="500" width="500"></canvas>
+                        <button class="copy-button" onclick="copyChart(this,'polarAreaChart')">Copy Image</button>
+                    </div>
+                    <div class="item">
+                        <canvas id="radarChart" class="chart-canvas" height="500" width="500"></canvas>
+                        <button class="copy-button" onclick="copyChart(this,'radarChart')">Copy Image</button>
+                    </div>
+                </div>
+
+                <a class="left carousel-control" href="#chartCarousel" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#chartCarousel" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
         </div>
     </div>
 </body>

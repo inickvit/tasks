@@ -1,6 +1,10 @@
+var charts = [];
+
 document.addEventListener("DOMContentLoaded", () => {
     fetchAndDraw();
 })
+
+var menuOpen = false;
 
 async function fetchData() {
 
@@ -30,42 +34,73 @@ async function fetchData() {
     }
 }
 
-async function fetchAndDraw() {
+async function fetchAndDraw(criteria = "year") {
     const data = await fetchData();
+    charts.forEach(chart => {
+        chart.destroy();
+    })
     if (data) {
-        generateChart(data, 'line', 'lineChart');
-        generateChart(data, 'bar', 'barChart');
-        generateChart(data, 'pie', 'pieChart');
-        generateChart(data, 'scatter', 'scatterPlot');
-        generateChart(data, 'doughnut', 'doughnutChart');
-        generateChart(data, 'polarArea', 'polarAreaChart');
-        generateChart(data, 'radar', 'radarChart')
+        charts.push(generateChart(data, 'line', 'lineChart', criteria));
+        charts.push(generateChart(data, 'bar', 'barChart', criteria));
+        charts.push(generateChart(data, 'pie', 'pieChart', criteria));
+        charts.push(generateChart(data, 'doughnut', 'doughnutChart', criteria));
+        charts.push(generateChart(data, 'polarArea', 'polarAreaChart', criteria));
+        charts.push(generateChart(data, 'radar', 'radarChart', criteria));
     } else {
         console.error('Failed to fetch data.');
     }
 }
 
-function generateChart(data, chartType = 'line', canvasId) {
-    const yearCounts = {};
-    data.forEach(item => {
-        const year = item.activityID.substring(0, 4);
-        yearCounts[year] = (yearCounts[year] || 0) + 1;
-    });
+function generateChart(data, chartType = 'line', canvasId, criteria = "year") {
+    let labels, counts;
+
+    if (criteria === 'year') {
+        const yearCounts = {};
+        data.forEach(item => {
+            const year = item.activityID.substring(0, 4);
+            yearCounts[year] = (yearCounts[year] || 0) + 1;
+        });
+        labels = Object.keys(yearCounts);
+        counts = Object.values(yearCounts);
+    } else if (criteria === 'month') {
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        const monthCounts = {};
+        data.forEach(item => {
+            const monthNumber = parseInt(item.activityID.substring(5, 7), 10);
+            const monthName = monthNames[monthNumber - 1];
+            monthCounts[monthName] = (monthCounts[monthName] || 0) + 1;
+        });
+
+        labels = Object.keys(monthCounts);
+        counts = Object.values(monthCounts).map(count => (count / 10));
+    } else if (criteria === 'hour') {
+        const hourCounts = Array(24).fill(0);
+        
+        data.forEach(item => {
+            const hour = parseInt(item.activityID.substring(11, 13), 10);
+            hourCounts[hour] += 1;
+        });
+
+        labels = Array.from({length: 24}, (_, i) => `${i}:00`);
+        counts = hourCounts.map(count => (count / 10));
+    }
 
     let titleText = chartType[0].toUpperCase() + chartType.slice(1) + ' Graph';
     let boringFlag = ['line', 'bar', 'scatter', 'radar'].includes(chartType) ? false : true;
     let legendPos = boringFlag ? 'right' : 'top';
 
-    const labels = Object.keys(yearCounts);
-    const counts = Object.values(yearCounts);
-
     const ctx = document.getElementById(canvasId).getContext('2d');
-    const myChart = new Chart(ctx, {
+    let config = {
         type: chartType,
         data: {
             labels: labels,
             datasets: [{
-                label: 'CME Count',
+                label: criteria === 'year' ? 'CME Count (Yearly)' : 
+                       criteria === 'month' ? 'Average CME Count (Monthly)' :
+                       'Average CME Count (Hourly GMT)',
                 data: counts,
                 borderWidth: 1
             }]
@@ -87,10 +122,25 @@ function generateChart(data, chartType = 'line', canvasId) {
             },
             responsive: false
         }
-    });
+    };
+    myChart = new Chart(ctx, config);
+    return myChart;
 }
 
-function copyChart(chartId) {
+
+function openCloseNav() {
+    if (!menuOpen) {
+        document.getElementById("menuSidebar").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px";
+        menuOpen = true;
+    } else {
+        document.getElementById("menuSidebar").style.width = "0";
+        document.getElementById("main").style.marginLeft = "0";
+        menuOpen = false
+    }
+}
+
+function copyChart(button, chartId) {
     var canvas = document.getElementById(chartId);
     canvas.toBlob(function(blob) {
         try {
@@ -99,7 +149,10 @@ function copyChart(chartId) {
                     'image/png': blob
                 })
             ]);
-            console.log('Image copied to clipboard successfully.');
+            button.innerText = "Copied!";
+            setTimeout(function() {
+                button.innerText = "Copy Image";
+            }, 800);
         } catch (error) {
             console.error('Unable to copy image to clipboard:', error);
         }
